@@ -97,6 +97,9 @@ class Crud
     {
         return $this->email_verified;
     }
+    public function get_errors_forgot_password(){
+        return $this->get_errors_forgot;
+    }
 
     // login form 
     public function login($post)
@@ -162,7 +165,9 @@ class Crud
                             if($row['role'] == "admin" && $row['status'] == "0"){
                            
                                 header("Location:product.php");
-                            }if($row['role'] == "user" && $row['status'] == "0"){
+                            }
+                           
+                             elseif($row['role'] == "user" && $row['status'] == "0"){
                         
                                 header("Location: user_page.php");
                                 $id_user =  $_SESSION['admin']['id'];
@@ -177,7 +182,7 @@ class Crud
                                 if($startDate > $endDate){
                                 $_SESSION['status'] = 'License Expired';
                                 header("Location: index.php");
-                            }
+                                 }
                                 elseif($diff <= 1   && $startDate<$endDate){
                                 $_SESSION['License'] =  "License will expire with next 1 days";
                                 header("Location:index1.php");
@@ -205,12 +210,14 @@ class Crud
                                     $_SESSION['License'] = "License will expire with next 30 days";
                                     header("Location:index1.php");
                                 }
-                              
-
-                            }elseif($row['role'] == "user" && $row['status'] == "1"){
-                                header("Location:index.php");
-                                $_SESSION['status'] = 'Your account is deactivated!!!';
+                               
                             }
+                            elseif( $row['role'] == "user" && $row['status'] == "1"){
+                                unset( $_SESSION['admin']);
+                                header("Location:index.php");
+                             
+                                $_SESSION['status'] = 'Your account is deactivated!!!';
+                           }
 
                            
                         } else {
@@ -230,7 +237,7 @@ class Crud
                         $this->get_errors_login[] = "This email don't exit!";
                     }
                 } else {
-                    $this->get_errors_login[] = "Login faild!";
+                    $this->get_errors_login[] = "Login failed!";
                 }
             } else {
                 $this->get_errors_login[] = "Email is not valid!";
@@ -239,4 +246,67 @@ class Crud
             $this->get_errors_login[] = "All fields are required!";
         }
     }
+
+    // Forgot Password 
+    public function forgotPassword($email){
+        $email = $this->con->escape_string($_POST['email']);   
+        $sql = "SELECT * FROM `users` WHERE `email`='$email'";
+        if ($result = $this->con->query($sql)) {
+            $row = $result->fetch_assoc();
+            if ($email == $row['email']) {
+                $to = $email;
+                $subject = "Reset your password on examplesite.com";
+                $msg = "Hi there, click on this <a href =\"http://localhost/e-comerce/new-password.php\">Reset your password</a> to reset your password on our site";
+                if (mail($to, $subject, $msg)) {
+                    $info = "Please login into your $email account and click on the link we sent to reset your password";
+                    $_SESSION['info'] = $info;
+                    $_SESSION['email_'] = $email;
+                    header('location: forgotPassword.php');
+                    exit();
+                } else {
+                   
+                    $this->get_errors_forgot[] = "Failed while sending code!";
+                    header('location: forgotPassword.php');
+                }
+
+            }else {
+                $this->get_errors_forgot[] = "Email is not valid!";
+                header('location: forgotPassword.php');
+            }
+        }else {
+            $this->get_errors_forgot[] = "Failed!";
+            header('location: forgotPassword.php');
+        }
+    }
+   // Change a Password
+   public function changePassword($change,$email){
+    $newpassword  = $this->con->escape_string($_POST['Newpassword']);
+    $cnewpassword  = $this->con->escape_string($_POST['CNewpassword']);
+    $email = $email;
+    $sql = "SELECT * from users";
+    $res = $this->con->query($sql);
+    if($res->num_rows > 0){
+        while($row = $res->fetch_assoc()){
+           
+            if($email == $row['email']){
+     
+               if($newpassword == $cnewpassword){
+                  $password = password_hash($newpassword, PASSWORD_BCRYPT);
+                  $query = "UPDATE users SET password = '$password' WHERE email = '$email'";
+                  $sql = $this->con->query($query);
+                  if ($sql == true) {
+                      header("Location:index.php?msg2=newPassword");
+                  } else {
+                      $this->errors[] = "Change updated failed try again!";
+                  }
+               }else{
+                  $this->errors[] = "Password and Confirm password doesn't match!";
+               }
+            }else{
+              $this->errors[] = "Email doesn't match!";
+            }
+        }
+    }
+
+   }
 }

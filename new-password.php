@@ -1,14 +1,18 @@
 <?php
-include "product_class.php";
+include "class.php";
 session_start();
 
-$changePassword = new Products();
-$id = $_SESSION['admin']['id'];
+
+$changePassword = new Crud();
+
+$email = $_SESSION['email_'];
 
 if (isset($_POST['submit'])) {
-    $changePassword->changePassword($_POST, $id);
+    $changePassword->changePassword($_POST, $email);
+   
     $error = $changePassword->get_errors();
 }
+
 
 
 
@@ -48,10 +52,7 @@ if (isset($_POST['submit'])) {
                         <?php }
                         } ?>
                         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                            <div class="mb-3">
-                                <label for="formGroupExampleInput" class="form-label">Old Password</label>
-                                <input type="password" class="form-control" id="formGroupExampleInput" name="password">
-                            </div>
+                          
                             <div class="mb-3">
                                 <label for="formGroupExampleInput2" class="form-label">New Password</label>
                                 <input type="password" class="form-control" id="formGroupExampleInput2" name="Newpassword">
@@ -61,7 +62,7 @@ if (isset($_POST['submit'])) {
                                 <input type="password" class="form-control" id="formGroupExampleInput2" name="CNewpassword">
                             </div>
                             <div class="d-grid gap-2 col-6 mx-auto">
-                                <button class="btn btn-outline-primary" type="submit" name="submit">Button</button>
+                                <button class="btn btn-outline-primary" type="submit" name="submit">Change</button>
                             </div>
                         </form>
                     </div>

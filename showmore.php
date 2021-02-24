@@ -113,7 +113,7 @@ if (isset($_GET["clearall"])) {
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-2 col-4">
-                        <a href="http://bootstrap-ecommerce.com" class="brand-wrap">
+                        <a href="user_page.php" class="brand-wrap">
                             <img class="logo" src="image/logo.png">
                         </a> <!-- brand-wrap.// -->
                     </div>
@@ -153,7 +153,7 @@ if (isset($_GET["clearall"])) {
                                             <i class="fa fa-user"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#">Change Password</a></li>
+                                            <li><a class="dropdown-item" href="changePassword.php">Change Password</a></li>
                                             <li>
                                                 <hr class="dropdown-divider">
                                             </li>

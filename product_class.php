@@ -71,6 +71,43 @@ class Products {
             echo "No found records";
         }
     }
+
+      // Display  a product for update
+      
+      public function displyaRecordById($id)
+      {
+          $query = "SELECT * FROM products WHERE id= '$id'";
+          $result = $this->con->query($query);
+          if ($result->num_rows > 0) {
+              $row = $result->fetch_assoc();
+              return $row;
+          } else {
+              echo "Record not found";
+          }
+      }
+       // Update product data into  table
+    public function updateRecord($postData)
+    {
+        $model = $this->con->real_escape_string($_POST['model']);
+        $title = $this->con->real_escape_string($_POST['title']);
+        $display = $this->con->real_escape_string($_POST['display']);
+        $qty = $this->con->real_escape_string($_POST['qty']);   
+        $battery = $this->con->real_escape_string($_POST['battery']);
+        $hardware = $this->con->real_escape_string($_POST['hardware']);
+        $price = $this->con->real_escape_string($_POST['price']);
+        $camera = $this->con->real_escape_string($_POST['camera']);
+
+        $id = $this->con->real_escape_string($_POST['id']);
+        if (!empty($id) && !empty($postData)) {
+            $query = "UPDATE products SET model = '$model', title = '$title', display = '$display' , qty = '$qty', battery = '$battery', hardware = '$hardware', price = '$price', camera = '$camera' WHERE id = '$id'";
+            $sql = $this->con->query($query);
+            if ($sql == true) {
+                header("Location:product.php?msg4=update");
+            } else {
+                echo "Registration updated failed try again!";
+            }
+        }
+    }
        // Delete customer data from customer table
        public function delete($id)
        {
@@ -101,7 +138,7 @@ class Products {
                         $query = "UPDATE users SET password = '$password' WHERE id = '$id'";
                         $sql = $this->con->query($query);
                         if ($sql == true) {
-                            header("Location:index.php?msg2=update");
+                            header("Location:product.php?msg2=change");
                         } else {
                             $this->errors[] = "Registration updated failed try again!";
                         }

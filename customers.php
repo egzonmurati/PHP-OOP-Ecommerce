@@ -216,8 +216,8 @@ if(isset($_GET['deleteId']) && !empty($_GET['deleteId'])){
         console.log(id);
         $.ajax({
             type: 'POST',
-            url: 'changeStatus.php',  //işlem yaptığımız sayfayı belirtiyoruz
-            data: { id:id, check: check }, //datamızı yolluyoruz
+            url: 'changeStatus.php',  
+            data: { id:id, check: check },
             success: function (result) {
                setTimeout(function() {
                   location.reload();

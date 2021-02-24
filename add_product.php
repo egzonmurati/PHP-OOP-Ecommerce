@@ -1,10 +1,6 @@
 <?php
 include "product_class.php";
 session_start();
-//  echo $_SESSION['admin']['id'];
-//  echo $_SESSION['admin']['email'];
-//  echo $_SESSION['admin']['password'];
-//  echo $_SESSION['admin']['role'];
 if (empty($_SESSION['admin'])) {
     header('location: index.php');
 }
@@ -17,8 +13,6 @@ if (isset($_POST['submit'])) {
     $addProducts->add_Products($_POST);
 }
 ?>
-
-
 <html lang="en">
 
 <head>
@@ -33,11 +27,8 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Shopping Phone</a>
-
-    
     </header>
 
     <div class="container-fluid">
@@ -45,7 +36,7 @@ if (isset($_POST['submit'])) {
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse ">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
-                   
+
 
                         <li class="nav-item  mb-2">
                             <a class="nav-link  text-white" href="product.php">
@@ -97,7 +88,7 @@ if (isset($_POST['submit'])) {
                                     Add New Products
                                 </div>
                                 <div class="card-body">
-                                    <form class="row g-3" method="POST"  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+                                    <form class="row g-3" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" enctype="multipart/form-data">
                                         <div class="col-md-4">
                                             <label for="inputCity" class="form-label">Model</label>
                                             <input type="text" name="model" class="form-control" id="inputCity">
@@ -114,12 +105,12 @@ if (isset($_POST['submit'])) {
                                             <label for="inputZip" class="form-label">Price</label>
                                             <input type="number" name="price" class="form-control" id="inputZip">
                                         </div>
-                                      
+
                                         <div class="col-md-4">
                                             <label for="inputCity" class="form-label">Hardware</label>
                                             <input type="text" name="hardware" class="form-control" id="inputCity">
                                         </div>
-                                        
+
                                         <div class="col-md-4">
                                             <label for="inputZip" class="form-label">Camera</label>
                                             <input type="text" name="camera" class="form-control" id="inputZip">
@@ -128,8 +119,8 @@ if (isset($_POST['submit'])) {
                                             <label for="inputZip" class="form-label">Battery</label>
                                             <input type="text" name="battery" class="form-control" id="inputZip">
                                         </div>
-                                
-                                       
+
+
                                         <div class="col-md-4">
                                             <label for="inputZip" class="form-label">Qty</label>
                                             <input type="number" name="qty" class="form-control" id="inputZip">
@@ -138,7 +129,7 @@ if (isset($_POST['submit'])) {
                                             <label for="formFileMultiple" class="form-label">Select a file</label>
                                             <input class="form-control" name="file" type="file" id="formFileMultiple" multiple>
                                         </div>
-                                     
+
 
                                         <div class="d-grid gap-2 col-6 mx-auto">
                                             <button class="btn btn-primary" name="submit" type="submit">Add</button>

@@ -12,29 +12,7 @@ $email = $_SESSION['email'];
 if($email == false){
   header('Location: login-user.php');
 }
-// if(isset($_POST['check'])){
-//     $code = $_POST['code'];
-//     echo "<br>";
-//     echo $code;
-//     $query = "SELECT email,active_status FROM users WHERE (email = '$email', active_status ='$code')";
-//     $result =  $verified->con->query($query);
-   
-//     if ( $result->num_rows > 0) {
-//         print_r($result);
-//         echo $result['active_status'];
-//         $update = "UPDATE users SET active_status = '$code' WHERE email = '$email' LIMIT 1";
-//         $sql = $verified->con->query($update);
-//         if($sql == true){
-//             header('location: index.php');
-//         }else{
-//             $errors['otp-error'] = "Failed ewewe updating code!";
-//         }
-//     }else{
-//         $errors['otp-error'] = "Failed while updating code!";
-//     }
-        
-   
-// }
+
 if(isset($_POST['check'])){
     $_SESSION['info'] = "";
     $otp_code = $_POST['code'];

@@ -1,27 +1,22 @@
 <?php
 include "class.php";
 session_start();
- if(isset($_SESSION["admin"]) ? $_SESSION["admin"]['role']=='admin':''){
-        header('location: admin_panel.php');
-    }
-    if(isset($_SESSION["admin"]) ? $_SESSION["admin"]['role']=='user':''){
-        header('location: user_page.php');
-    }
+if (isset($_SESSION["admin"]) ? $_SESSION["admin"]['role'] == 'admin' : '') {
+    header('location: product.php');
+}
+if (isset($_SESSION["admin"]) ? $_SESSION["admin"]['role'] == 'user' : '') {
+    header('location: user_page.php');
+}
 $registerLogin = new Crud();
-
 if (isset($_POST['register'])) {
     $registerLogin->register($_POST);
     $error = $registerLogin->get_errors();
     // $email_verified = $registerLogin->email_verified;
 }
-if(isset($_POST['login'])){
-  $registerLogin->login($_POST);
-  $get_errors_login = $registerLogin->get_errors_login_all();
-
+if (isset($_POST['login'])) {
+    $registerLogin->login($_POST);
+    $get_errors_login = $registerLogin->get_errors_login_all();
 }
-
-
-
 ?>
 
 <!doctype html>
@@ -84,8 +79,8 @@ if(isset($_POST['login'])){
                                     </div>
                             <?php }
                             } ?>
-                         
-                            
+
+
 
                         </div>
                         <div class="container">
@@ -130,35 +125,42 @@ if(isset($_POST['login'])){
                         <div class="text-left w-100 mb-4 ml-3">
                             <p class="text-green h3 font-weight-bold text-uppercase">Login Form</p>
                             <?php 
-                    if(!empty($_SESSION['success'])){
-                        ?>
-                      
+                                          if (isset($_GET['msg2']) == "newPassword") {
+                                            echo "
+                                            <div class='alert alert-success alert-dismissible fade show' role='alert'>
+                                            Password change successfully !
+                                 <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                                                    </div>
+                                                    
+                                                    ";
+                                        }
+                                        ?>
+                            <?php
+                            if (!empty($_SESSION['success'])) {
+                            ?>
 
-                        
-                        <div class='alert alert-success alert-dismissible col-md-10 ml-4 mt-1'>
-                            
-      <button  class='close'  type="submit" name="unset_session" data-dismiss='alert'>&times;</button>
-                                        <?php echo $_SESSION['success']; ?>
-                                    </div>
-                                
-                        <?php
-                    }
-                    ?>
-                             <?php 
-                    if(!empty($_SESSION['status'])){
-                        ?>
-                      
+                                <div class='alert alert-success alert-dismissible col-md-10 ml-4 mt-1'>
+                                    <button class='close' type="submit" name="unset_session" data-dismiss='alert'>&times;</button>
+                                    <?php echo $_SESSION['success']; ?>
+                                </div>
+                            <?php
+                            }
+                            ?>
+                            <?php
+                            if (!empty($_SESSION['status'])) {
+                            ?>
 
-                        
-                        <div class='alert alert-danger alert-dismissible col-md-10 ml-4 mt-1'>
-                            
-      <button  class='close'  type="submit" name="unset_session" data-dismiss='alert'>&times;</button>
-                                        <?php echo $_SESSION['status']; ?>
-                                    </div>
-                                
-                        <?php
-                    }
-                    ?>
+
+
+                                <div class='alert alert-danger alert-dismissible col-md-10 ml-4 mt-1'>
+
+                                    <button class='close' type="submit" name="unset_session" data-dismiss='alert'>&times;</button>
+                                    <?php echo $_SESSION['status']; ?>
+                                </div>
+
+                            <?php
+                            }
+                            ?>
                             <?php
                             if (isset($get_errors_login)) {
                                 foreach ($get_errors_login as $e) { ?>
@@ -168,28 +170,32 @@ if(isset($_POST['login'])){
                                     </div>
                             <?php }
                             } ?>
+                       
                         </div>
 
                         <div class="form-group col-lg-12 mb-3">
-                            <input type="email" class="form-control" name="email" value="<?php if(isset($_COOKIE["email"])) { echo $_COOKIE["email"]; } ?>" placeholder="Email address">
+                            <input type="email" class="form-control" name="email" value="<?php if (isset($_COOKIE["email"])) {
+                                                                                                echo $_COOKIE["email"];
+                                                                                            } ?>" placeholder="Email address">
                         </div>
                         <div class="form-group col-lg-12 mb-3">
-                            <input type="password" class="form-control" name="password" value="<?php if(isset($_COOKIE["password"])) { echo $_COOKIE["password"]; } ?>" placeholder="Password">
+                            <input type="password" class="form-control" name="password" value="<?php if (isset($_COOKIE["password"])) {
+                             echo $_COOKIE["password"];
+                                  } ?>" placeholder="Password">
                         </div>
                         <div class="form-check col-lg-12 mb-3 ml-3">
-                        <input type="checkbox" name="remember" class="form-check-input" id="exampleCheck1" <?php if(isset($_COOKIE["remember"])) { ?> checked <?php } ?> />  
+                            <input type="checkbox" name="remember" class="form-check-input" id="exampleCheck1" <?php if (isset($_COOKIE["remember"])) { ?> checked <?php } ?> />
 
-    <label class="form-check-label text-muted font-weight-bold" for="exampleCheck1">Remember me</label>
-  </div>
-                       
+                            <label class="form-check-label text-muted font-weight-bold" for="exampleCheck1">Remember me</label>
+                        </div>
+
                         <div class="form-group col-lg-12 mx-auto mb-3">
- <input type="submit" id="login_now" name="login" class="btn btn-primary btn-block py-2 font-weight-bold" 
- value="Log In">
+                            <input type="submit" id="login_now" name="login" class="btn btn-primary btn-block py-2 font-weight-bold" value="Log In">
 
-                        
+
                         </div>
                         <div class="text-center w-100">
-                            <p class="text-muted font-weight-bold"><a href="forger-password.php" class="text-primary ml-2">Forgot Password?</a></p>
+                            <p class="text-muted font-weight-bold"><a href="forgotPassword.php" class="text-primary ml-2">Forgot Password?</a></p>
                         </div>
                         <div class="form-group col-lg-12 mx-auto d-flex align-items-center my-4">
                             <div class="border-bottom w-100 ml-5"></div>
@@ -221,8 +227,8 @@ if(isset($_POST['login'])){
         let register = document.getElementById("register");
         let login_now = document.getElementById("login_now");
 
-        login_now.addEventListener("click",function(){
-           
+        login_now.addEventListener("click", function() {
+
             registerForm.style.display = "none";
             loginForm.style.display = "block";
         });

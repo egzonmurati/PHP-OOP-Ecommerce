@@ -8,9 +8,6 @@ $id_session =  $_SESSION['admin']['id'];
 if(isset($_POST["add_to_cart"]))
 {
     
-  
-  
- 
  if(isset($_COOKIE["shopping_cart"]))
  {
   $cookie_data = stripslashes($_COOKIE['shopping_cart']);
@@ -71,5 +68,3 @@ if(isset($_POST["add_to_cart"]))
  setcookie('shopping_cart', $item_data, time() + (86400 * 30));
  header("location:user_page.php?success=1");
 }
-
-?>

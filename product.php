@@ -14,8 +14,11 @@ if ($_SESSION['admin']['role'] == 'user') {
 $addProducts = new Products();
 
 $display = $addProducts->displayProduct();
-
-if(isset($_GET['deleteId']) && !empty($_GET['deleteId'])){
+// Update product in  table
+if (isset($_POST['update'])) {
+    $addProducts->updateRecord($_POST);
+}
+if (isset($_GET['deleteId']) && !empty($_GET['deleteId'])) {
     $deleteId = $_GET['deleteId'];
     $addProducts->delete($deleteId);
 }
@@ -41,7 +44,7 @@ if(isset($_GET['deleteId']) && !empty($_GET['deleteId'])){
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Shopping Phone</a>
 
-        
+
     </header>
 
     <div class="container-fluid">
@@ -49,7 +52,7 @@ if(isset($_GET['deleteId']) && !empty($_GET['deleteId'])){
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse ">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
-                    
+
                         <li class="nav-item  mb-2">
                             <a class="nav-link  active" href="product.php">
                                 <i class="fas fa-shopping-cart"></i>
@@ -74,11 +77,21 @@ if(isset($_GET['deleteId']) && !empty($_GET['deleteId'])){
                                 Change Password
                             </a>
                         </li>
+                        <?php
+                        if (isset($_GET['msg2']) == "change") {
+                            echo "
+                                            <div class='alert alert-success alert-dismissible fade show' role='alert'>
+                                            Password change successfully !
+  <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+</div>
+";
+                        }
+                        ?>
                     </ul>
                     <div class="border-top border-light p-3 mb-4 mt-5">
 
                         <div class="text-center">
-                        <a href="logoutadmin.php" class="btn btn-outline-danger">Log Out</a>
+                            <a href="logoutadmin.php" class="btn btn-outline-danger">Log Out</a>
                         </div>
 
                     </div>
@@ -88,38 +101,46 @@ if(isset($_GET['deleteId']) && !empty($_GET['deleteId'])){
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Display All Products</h1>
                 </div>
-                
+
                 <div class="container">
                     <div class="row justify-content-md-center">
                         <div class="col-md-11">
                             <div class="card">
                                 <div class="card-header bg-primary">
-                                   All Products
+                                    All Products
                                 </div>
                                 <div class="card-body">
-                                    <?php 
-                                          if (isset($_GET['msg3']) == "delete") {
-                                            echo "<div class='alert alert-danger alert-dismissible'>
-                                              <button type='button' class='close' data-dismiss='alert'>&times;</button>
-                                              Record deleted successfully
-                                            </div>";
-                                        }
-                                        ?>
-                                <table id="example" class="table  responsive nowrap  table-responsive-sm" style="width:100%">  
+                                    <?php
+                                    if (isset($_GET['msg3']) == "delete") {
+                                        echo "
+                                            <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                                            Product deleted successfully
+                                            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                                             </div>
+                                            
+                                            ";
+                                    }elseif (isset($_GET['msg4']) == "update") {
+                                        echo " <div class='alert alert-success alert-dismissible fade show' role='alert'>
+                                        Product update successfully
+                                        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                                         </div>";
+                                    }
+                                    ?>
+                                    <table id="example" class="table  responsive nowrap  table-responsive-sm" style="width:100%">
                                         <thead>
-                                            <tr>        
+                                            <tr>
                                                 <th>Title</th>
                                                 <th>Price</th>
-                                               
+
                                                 <th>Hardware</th>
                                                 <th>Battery</th>
                                                 <th>Action</th>
                                                 <th>Display</th>
                                                 <th>Camera</th>
-                                               
+
                                                 <th>Qty</th>
                                                 <th>Image</th>
-                                               
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -129,48 +150,65 @@ if(isset($_GET['deleteId']) && !empty($_GET['deleteId'])){
                                                 foreach ($display as $row) {
                                             ?>
                                                     <tr>
-                                              
+
                                                         <td><?php echo ucfirst($row['title']) ?></td>
                                                         <td><?php echo $row['price'] ?> €</td>
-                                                        
+
                                                         <td><?php echo $row['hardware'] ?></td>
                                                         <td><?php echo $row['battery'] ?></td>
                                                         <td>
-                                                        <button type="button" class="btn btn-primary btn-sm"> <i class="fa fa-edit"></i> Update</button>
+                                                            <button type="button" class="btn btn-primary btn-sm edit_data" id="<?php echo $row["id"]; ?>"  data-bs-toggle="modal" data-bs-target="#exampleModal"> <i class="fa fa-edit"></i> Update</button>
                                                             &nbsp;
-      <a href="product.php?deleteId=<?php echo $row['id'] ?>" class="btn btn-danger btn-sm" onclick="confirm('Are you sure want to delete this record')"><i class="fas fa-trash-alt"></i> Delete</a>
-    </td>
-                                                           
-                                                            <td><?php echo $row['display'] ?></td>
+                                                            <a href="product.php?deleteId=<?php echo $row['id'] ?>" class="btn btn-danger btn-sm" onclick="confirm('Are you sure want to delete this record')"><i class="fas fa-trash-alt"></i> Delete</a>
+                                                        </td>
+
+                                                        <td><?php echo $row['display'] ?></td>
                                                         <td><?php echo $row['camera'] ?></td>
-                                                        
-                                                        
+
+
                                                         <td><?php echo $row['qty'] ?></td>
                                                         <td>
                                                             <?php $result = $row['images'] ?>
                                                             <img src="image/<?php echo $result ?>" class="img-responsive" width="50" height="50">
 
                                                         </td>
-                                                    
+
 
                                                     </tr>
                                             <?php }
                                             } ?>
                                         </tbody>
                                     </table>
-                               
+
                                 </div>
                             </div>
+
                         </div>
 
                     </div>
                 </div>
+             
 
 
-
-
-
-
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <form action="product.php" method="POST">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update the product </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="update_details">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" name="update" class="btn btn-primary" id="update">Save changes</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
             </main>
         </div>
     </div>
@@ -183,25 +221,44 @@ if(isset($_GET['deleteId']) && !empty($_GET['deleteId'])){
     <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.6/js/responsive.bootstrap4.min.js"></script>
     <script type="text/javascript">
- $(document).ready(function() {
-   $('#example').DataTable( {
-       "scrollX": true,
-        "paging":   true,
-        "ordering": true,
-        "info":     false,
+        $(document).ready(function() {
+            $('#example').DataTable({
+                "scrollX": true,
+                "paging": true,
+                "ordering": true,
+                "info": false,
 
-        "lengthMenu": [[10, 15, 20, -1], [10, 15, 20, "All"]],
-        language: {
-        search: "_INPUT_",
-        searchPlaceholder: "Search..."
-    }
-  
-    } );
+                "lengthMenu": [
+                    [10, 15, 20, -1],
+                    [10, 15, 20, "All"]
+                ],
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search..."
+                }
+
+            });
+            $(document).on("click", '.edit_data', function() {
+            var edit_id = $(this).attr('id');
+            console.log(edit_id);
+            $.ajax({
+                url: "update_product.php",
+                type: "post",
+                data: {
+                    edit_id: edit_id
+                },
+                success: function(data) {
+                    $('#update_details').html(data);
+                    $('#exampleModal').modal('show');
+                }
+            });
+
+        });
 
 
-  
-} );
-</script>
+
+        });
+    </script>
 
 </body>
 

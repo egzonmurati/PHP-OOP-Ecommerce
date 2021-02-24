@@ -1,3 +1,15 @@
+<?php 
+include "class.php";
+session_start();
+$forgotPassword = new Crud();
+
+if (isset($_POST['submit'])) {
+  $forgotPassword->forgotPassword($_POST);
+  $get_errors_login = $forgotPassword->get_errors_login_all();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,9 +39,29 @@
                   <h3><i class="fa fa-lock fa-4x"></i></h3>
                   <h2 class="text-center">Forgot Password?</h2>
                   <p>You can reset your password here.</p>
+                  <?php
+                            if (isset($get_errors_login)) {
+                                foreach ($get_errors_login as $e) { ?>
+                                    <div class='alert alert-danger alert-dismissible col-md-10 ml-4 mt-1'>
+                                        <button type='button' class='close' data-dismiss='alert'>&times;</button>
+                                        <?php echo $e; ?>
+                                    </div>
+                            <?php }
+                            } ?>
+                               <?php
+                            if (!empty($_SESSION['info'])) {
+                            ?>
+                         
+                                <div class='alert alert-success alert-dismissible col-md-12'>
+                                    <button class='close' type="submit" name="unset_session" data-dismiss='alert'>&times;</button>
+                                    <?php echo $_SESSION['info']; ?>
+                                </div>
+                            <?php
+                            }
+                            ?>
                   <div class="panel-body">
     
-                    <form id="register-form" role="form" autocomplete="off" class="form" method="post">
+                    <form id="register-form" role="form" autocomplete="off" class="form"method="POST"  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
     
                       <div class="form-group">
                         <div class="input-group">
@@ -38,10 +70,10 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <input name="recover-submit" class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
+                        <input  name="submit" class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
                       </div>
                       
-                      <input type="hidden" class="hide" name="token" id="token" value=""> 
+                     
                     </form>
     
                   </div>
